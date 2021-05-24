@@ -1,0 +1,7 @@
+Pls find code attached. I have a Employee class (implements Comparable ) that implements its own hasCode, equals and toString method as well as compareTo
+
+Another class is a TreeSet implementation of this Employee object. 
+
+I am trying to iterate over treeset and print all the contents.. 
+expectation is that contents will be printed in treeset default ascending sorted order. But I am only getting first emploee object printed. 
+and treeset size also returns 1 but there are 5 employee objects that have been added to the treeset. Pls review and advice

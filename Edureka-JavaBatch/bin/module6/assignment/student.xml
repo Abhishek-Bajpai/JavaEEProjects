@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+	<student>
+		<id>1</id>
+		<name>Everest</name>
+		<Standard>2</Standard>
+		<gender>male</gender>
+		<marks>95</marks>
+		<address>
+			<StreetName>Touchstone Ter</StreetName>
+			<HouseNumber>4735</HouseNumber>
+			<City>Fremont</City>
+			<ZipCode>94555</ZipCode>
+		</address>
+	</student>
+	<student>
+		<id>2</id>
+		<name>Amiya</name>
+		<Standard>7</Standard>
+		<gender>Female</gender>
+		<marks>97</marks>
+		<address>
+			<StreetName>Touchstone Ter</StreetName>
+			<HouseNumber>4735</HouseNumber>
+			<City>Fremont</City>
+			<ZipCode>94555</ZipCode>
+		</address>
+	</student>	
+		<student>
+		<id>3</id>
+		<name>Abeer</name>
+		<Standard>10</Standard>
+		<gender>male</gender>
+		<marks>100</marks>
+		<address>
+			<StreetName>Touchstone Ter</StreetName>
+			<HouseNumber>4735</HouseNumber>
+			<City>Fremont</City>
+			<ZipCode>94555</ZipCode>
+		</address>
+	</student>
+	<student>
+		<id>4</id>
+		<name>Gouri</name>
+		<Standard>18</Standard>
+		<gender>Female</gender>
+		<marks>99</marks>
+		<address>
+			<StreetName>Solar Circle</StreetName>
+			<HouseNumber>4292</HouseNumber>
+			<City>Union City</City>
+			<ZipCode>94587</ZipCode>
+		</address>
+	</student>
+</students>

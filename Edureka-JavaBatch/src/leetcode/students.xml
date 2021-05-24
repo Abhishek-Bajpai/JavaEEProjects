@@ -1,0 +1,15 @@
+<lib:library>
+ <lib:book id="b0836217462" available="true">
+   <lib:isbn>0836217462
+   <lib:title xml:lang="en">Being a human Is a Full-Time Job
+   <hr:author id="CMS">
+    <hr:name>Charles M Schulz
+    <hr:born>1922-11-26
+    <hr:dead>2000-02-12
+   </hr:author>
+   <lib:character id="PP">
+    <hr:name>Peppermint Patty
+    1966-08-22<lib:qualification>bold, brash and tomboyish
+    </lib:character>  
+  </lib:book>
+ </lib:library>"

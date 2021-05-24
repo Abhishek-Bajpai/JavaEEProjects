@@ -1,0 +1,11 @@
+<!DOCTYPE Adventurers
+[
+<!ELEMENT Adventurers (Adventurer)*>
+<!ELEMENT Adventurer (Name, from, Profession)*>
+<!ELEMENT Name (#PCDATA)*>
+<!ATTLIST Name employed CDATA "Yes">
+<!ELEMENT from (#PCDATA)*>
+<!ATTLIST from native CDATA "No">
+<!ELEMENT Profession (#PCDATA)*>
+<!ATTLIST Profession techJob CDATA "Yes">
+]>
