@@ -25,11 +25,11 @@ public class DatabaseStoredProcsAndFunctionsOps {
 
 		/**
 		 * Please first run this on the backend to create stored procedure- "insertIntoEmp"
-		   
-			CREATE OR REPLACE PROCEDURE EDUREKA.insertIntoEmp(IN name varchar2(10), IN sal int)
-			BEGIN
-				INSERT INTO emp values(name, sal);
-			end
+			
+			CREATE PROCEDURE edureka.insertIntoEmp (name IN VARCHAR, sal IN NUMBER) IS
+			   BEGIN
+			      insert into emp values(name, sal);
+			   END;
 		 */
 		
 		Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "edureka", "Dost!234");
