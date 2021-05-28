@@ -1,9 +1,37 @@
+<%@page import="bajpai.edu.beans.AccountInfo"%>
+<%@page import="bajpai.edu.beans.CustomerInfo"%>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="bajpai.edu.beans.TransactionInfo"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.apache.naming.java.javaURLContextFactory"%>
+<%@page import="bajpai.edu.dao.TransactionInfoImpl"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Login V6</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+	form { margin: 0 auto; }
+
+select, input
+{
+	padding:5px;
+	font-size:20px;
+}
+select.textIndent
+{
+	text-indent:1.5px;
+}
+select.paddingOffset
+{
+	padding-left:25px;
+}
+input.paddingOffset
+{
+	padding-left:25px;
+}
+	</style>
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 <!--===============================================================================================-->
@@ -29,61 +57,73 @@
 </head>
 <body>
 	
-	<div class="limiter">
+	<div class="limiter" >
 		<div class="container-login100">
 			<div class="wrap-login100 p-t-85 p-b-20">
-				<form class="login100-form validate-form" action="processRegistration.jsp" method="post">
-					<span class="login100-form-title p-b-70">
-						Account Registration
-					</span>
-					
-					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter FullName">
-						<input class="input100" type="text" name="name">
-						<span class="focus-input100" data-placeholder="Full Name"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter BirthDate">
-						<input class="input100" type="date" name="bday">
-						<span class="focus-input100" ></span>
-					</div>
-					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter Address">
-						<input class="input100" type="textarea" name="address" width=20 height=10>
-						<span class="focus-input100" data-placeholder="Address"></span>
-					</div>
-					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Enter EmailID">
-						<input class="input100" type="text" name="emailid">
-						<span class="focus-input100" data-placeholder="Email ID"></span>
-					</div>
  
-					<div class="wrap-input100 validate-input m-t-85 m-b-35" data-validate = "Choose Account Type">
-					<span class="focus-input100" data-placeholder="Choose Account Type:"></span><br/><br/>
+ <%
 
-					<!-- label class="focus-input100" for="accounts">Choose Account Type:</label><br/ -->
-					<select class="select.classic"  name="accounts" id="accounts">
-					  <option value="savings">Savings Account</option>
-					  <option value="checkin">Check-in Account</option>
-					  <option value="credit">Credit Card Account</option>
-					  <option value="loan">Loan Account</option>
-					</select>
-					</div>
- 
-					<div class="wrap-input100 validate-input m-b-50" data-validate="Enter password">
-						<input class="input100" type="password" name="pass">
-						<span class="focus-input100" data-placeholder="Password"></span>
-					</div>
+TransactionInfoImpl txnInfoImpl = new TransactionInfoImpl();
 
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
-							Register
-						</button>
-					</div>
-					<br/></br/>
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" href="index.html" onclick="index.html">
-							Login
-						</button>
-					</div>		
-					
-				</form>
+CustomerInfo customer = (CustomerInfo) request.getSession().getAttribute("customer");
+ArrayList<AccountInfo> listOfAccountsAccountInfos = (ArrayList<AccountInfo>) request.getSession().getAttribute("accounts");
+
+PrintWriter writer = response.getWriter();
+String typeOfTxn=""; 
+
+ArrayList<AccountInfo> listOfAccounts = customer.getArrayListOfAccountsForThisCustomer();
+
+//trying new code --better presentation
+
+writer.println("<form action='"+ "testTxnHistory.jsp"+"'method='"+"'post"+"'>");
+writer.println("<table><tr><td><label class='"+"focus-input100'"+ "for='"+"accounts'"+"><br><br>Choose Account to get transaction records</label></td></tr><br><br>&emsp;");
+writer.println("<select class='select' dir='rt1' style='"+"width:200px;-webkit-appearance: none;"+"' name='accounts' id='accounts'>");
+for(AccountInfo acc: listOfAccountsAccountInfos){
+	writer.println("<option name='accNum'>" + acc.getAccNumber() + "</option>");
+}
+writer.println("</select>");
+writer.println("<br><br><tr><td><div class='"+"container-login100-form-btn"+"'><button class='"+"login100-form-btn"+"'>Submit</button></div></div></td></tr></table></form><br>");		
+
+//writer.println("<h1>"+request.getParameter("accounts")+"</h1>");
+String selectedAccForHistory = request.getParameter("accounts");
+AccountInfo selectedAcc=null;
+
+for(AccountInfo acc:listOfAccounts){
+	if(acc.getAccNumber()== Integer.parseInt(selectedAccForHistory)){
+		selectedAcc = acc;
+	}
+}
+ArrayList<TransactionInfo> listOfTxns = txnInfoImpl.fetchTxnHistory(String.valueOf(selectedAccForHistory));
+int totalCredit=0, totalDebit=0;
+
+	
+writer.println("<h4> Transaction Records For : </h4><br>");
+
+writer.println("<table border=1><tr><th>Account Number</th><td>"+ selectedAccForHistory +"</td></tr>");
+writer.println("<tr><th>Current Account Balance </th><td>"+ selectedAcc.getCurrAccBalance()+"</td></tr>");
+writer.println("<tr><th>Current Account Type </th><td>"+ selectedAcc.getAccType()+"</td></tr></table><br/><br/>");
+
+writer.println("<table border=1><tr><th> Index </th><th> Transaction ID </th><th> Date / Time </th><th> Amount </th><th> Transaction Performed </th></tr>");
+int index=1;
+for(TransactionInfo txnInfo: listOfTxns) {
+	if(txnInfo.getTypeOfOperation().equalsIgnoreCase("credit")){
+		typeOfTxn = "Deposit";
+		totalCredit = totalCredit+txnInfo.getAmountInvolved();
+	}else{
+		typeOfTxn = "Withdrawl";
+		totalDebit = totalDebit + txnInfo.getAmountInvolved();
+	}
+	writer.println("<tr><td>"+ index +"</td><td>"+txnInfo.getTxnID()+"</td><td>"+txnInfo.getDateTimeOfOperation()+"</td><td>"+txnInfo.getAmountInvolved()+"</td><td>"+typeOfTxn+"</td></tr>");
+	index++;
+}
+writer.println("</table><br/><br/>");
+writer.println("----------------------------------------------------");
+writer.println("Total Deposited  : " + totalCredit  + "<br/><br/>");
+writer.println("----------------------------------------------------");
+writer.println("Total Withdrawls : " + totalDebit   + "<br/><br/>");
+
+%>				
+		
 			</div>
 		</div>
 	</div>

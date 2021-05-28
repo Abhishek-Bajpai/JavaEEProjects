@@ -11,8 +11,9 @@
 <title>Insert title here</title>
 </head>
 <body>
- <%
 
+
+ <%
 System.out.println(request.getSession().getAttribute("customer"));
 System.out.println(request.getSession().getAttribute("accounts"));
 
@@ -30,7 +31,7 @@ writer.println("<select class='select' name='accounts' id='accounts'>");
 for(AccountInfo acc: listOfAccountsAccountInfos){
 //	if(acc.getAccType().equalsIgnoreCase("savings") || acc.getAccType().equalsIgnoreCase("checkin"))
 	   //writer.println("<option name='accNum'>" + acc.getAccType() + " - "+ acc.getAccNumber() + "</option>");
-	writer.println("<option name='accNum'>" + acc.getAccNumber() + "</option>");
+	writer.println("<option name='accNum'><label>"+acc.getAccType()+"</label> - " + acc.getAccNumber() + "</option>");
 }
 
 writer.println("</select></div><br/>");
@@ -44,6 +45,9 @@ writer.println("<div><input type='"+"radio'"+ "id='"+"credit'"+ "name='"+"txnCho
 writer.println("<label for='" +"credit'" + ">Deposit</label></div></div><br/><br/>");
 
 writer.println("<div><button>Submit</button></div></form>");		
+
+String backtoPerformTxn ="<form action="+"'processLogin.jsp'"+ "method='"+"'post'"+"><div class=" + "'container-login100-form-btn'" + "><button class=" + "'login100-form-btn'" + ">Back</button></div></form>"; 
+writer.println("<br><br>"+backtoPerformTxn);		
 
 %>
 </body>

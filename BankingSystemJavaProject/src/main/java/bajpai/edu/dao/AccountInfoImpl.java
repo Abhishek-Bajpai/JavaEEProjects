@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import bajpai.edu.beans.AccountInfo;
 import bajpai.edu.beans.CustomerInfo;
@@ -20,9 +23,61 @@ import bajpai.edu.beans.TransactionInfo;
 public class AccountInfoImpl extends BankingSystemDBOps {
 
  	@Override
-	public void createAccount(AccountInfo accountInfo) {
-		// TODO Auto-generated method stub
-		
+	public boolean createAccount(AccountInfo account) {
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
+		Statement statement;
+		try {
+			statement = connection.createStatement();
+			connection.setAutoCommit(false); 
+
+//Insert account record 			
+ 			int generatedAccNum = AccountNumberGenerator.nextAccountNumber();
+ 			System.out.println("Generated Account Number is - " + generatedAccNum);
+ 			//AccountInfo account=new AccountInfo(generatedAccNum, accountInfo.getAccType(), accountInfo.getEmailID(), accountInfo.getCurrAccBalance());
+ 			String accountSqlStmt = "insert into accountinfo values(" + generatedAccNum +", '"+ account.getAccType() + "','"+account.getEmailID() +"','"+account.getCurrAccBalance() + "')";
+ 			System.out.println("\t" + accountSqlStmt);
+
+//Insert Transaction Record
+ 			AtomicInteger seqTxn = new AtomicInteger();
+ 			long txnID= System.currentTimeMillis();
+ 			
+ 			Date date = new Date(); 
+ 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+ 			System.out.println(formatter.format(date));
+ 			
+ 			System.out.println("Generated txnId No is - " + txnID);
+ 			//TransactionInfo transactionInfo = new TransactionInfo(txnID, generatedAccNum, customerSqlStmt, accNumber, accountSqlStmt);
+ 			String txnSqlStmt = "insert into transactioninfo values(" + txnID +", "+ generatedAccNum + ", TO_DATE('" + formatter.format(date) + "','DD-MM-YYYY HH24:MI:SS'),"+account.getCurrAccBalance() + ",'"+ "credit" +"')";
+ 			System.out.println("\t" + txnSqlStmt);
+
+
+ 			statement.addBatch(accountSqlStmt);
+ 			statement.addBatch(txnSqlStmt);
+ 			
+ 			statement.executeBatch();
+ 			//statement.executeUpdate(customerSqlStmt);
+			System.out.println("Records Inserted for " + account.getEmailID() + "...!!! ");
+			
+			connection.commit();
+			return true;
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;		
 	}
 
 	@Override
@@ -66,8 +121,9 @@ public class AccountInfoImpl extends BankingSystemDBOps {
 	@Override
 	public ArrayList<AccountInfo> fetchCustomerAccounts(String emailID) {
 
-		Connection connection = BankingSystemDBOps.getConnection();
-			ArrayList<AccountInfo> listOfUserAccounts = new ArrayList<>();
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
+		ArrayList<AccountInfo> listOfUserAccounts = new ArrayList<>();
 
 			
 		Statement statement;

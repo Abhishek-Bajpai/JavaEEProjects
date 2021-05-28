@@ -1,3 +1,5 @@
+<%@page import="javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar"%>
+<%@page import="bajpai.edu.beans.TransactionInfo"%>
 <%@page import="bajpai.edu.beans.CustomerInfo"%>
 <%@page import="bajpai.edu.beans.AccountInfo"%>
 <%@page import="java.util.ArrayList"%>
@@ -11,10 +13,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%="Transaction processed" %>
-<%
-
-int accNumber = Integer.parseInt(request.getParameter("accounts"));
+ 
+ <%
+ String str=(String) request.getParameter("accounts");
+ String numberOnly= str.replaceAll("[^0-9]", "");
+ System.out.println(">>>>> Acc Num extracted : " + numberOnly);
+ 
+ int accNumber = Integer.parseInt(numberOnly);
+ 
 int amount = Integer.parseInt(request.getParameter("amount"));
 String typeOfOperation = request.getParameter("txnChoice");
 String currAccBalance=null;
@@ -29,10 +35,7 @@ for(AccountInfo acc:listOfAccountsAccountInfos){
 }
 
 System.out.println(accNumber + "\n\t" + typeOfOperation + "\n\t\t" + amount + "\n\t\t\t" + currAccBalance);
-%>
-<%=accNumber + " - " + amount + " - " + typeOfOperation + " - " + currAccBalance %>
-
-<%
+ 
 TransactionInfoImpl transactionInfoImpl = new TransactionInfoImpl();
 //Create TXN record
 long confirmationNo = transactionInfoImpl.createTxnRecord(accNumber, typeOfAcc , typeOfOperation, amount, Integer.parseInt(currAccBalance));
@@ -45,10 +48,18 @@ customer.setArrayListOfAccountsForThisCustomer(arrayListOfAccountsForThisCustome
 request.setAttribute("accounts", arrayListOfAccountsForThisCustomer);
 
 java.io.PrintWriter writer = response.getWriter();
-writer.println("<h1>Transaction processed.. Pls note transaction id for future reference - " + confirmationNo);
+writer.println("<h4>Transaction processed, details below for your future reference</h4>");
 
-RequestDispatcher dispatcher = request.getRequestDispatcher("processLogin.jsp");
-dispatcher.include(request, response);
+TransactionInfo txnInfo = transactionInfoImpl.fetchTxnHistory(confirmationNo);
+		
+writer.println("<table border=1><tr><th> Transaction ID </th><th> Account No </th><th> Date / Time </th><th> Amount </th><th> Operation </th></tr>");
+writer.println("<tr><td>"+txnInfo.getTxnID()+"</td><td>"+txnInfo.getAccNumber()+"</td><td>"+ txnInfo.getDateTimeOfOperation() +"</td><td>"+ txnInfo.getAmountInvolved()+"</td><td>"+txnInfo.getTypeOfOperation()+"</td></tr></table>");
+		
+String backtoPerformTxn ="<form action="+"'processLogin.jsp'"+ "method='"+"'post'"+"><div class=" + "'container-login100-form-btn'" + "><button class=" + "'login100-form-btn'" + ">Back</button></div></form>"; 
+writer.println("<br><br>"+backtoPerformTxn);
+
+/* RequestDispatcher dispatcher = request.getRequestDispatcher("processLogin.jsp");
+dispatcher.include(request, response); */
 %>
 
 

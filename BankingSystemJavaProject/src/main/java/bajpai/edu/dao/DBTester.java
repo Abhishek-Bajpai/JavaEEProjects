@@ -36,14 +36,20 @@ public class DBTester {
 	
 		//TransactionInfoImpl.createTxnRecord(1601705599, "", "credit", 124000, 7524000);
 		
-		TransactionInfoImpl txnInfoImpl = new TransactionInfoImpl();
-		ArrayList<TransactionInfo> listOfTxns = txnInfoImpl.fetchTxnHistory("1601705599");
+		/*
+		 * TransactionInfoImpl txnInfoImpl = new TransactionInfoImpl();
+		 * ArrayList<TransactionInfo> listOfTxns =
+		 * txnInfoImpl.fetchTxnHistory("1601705599");
+		 * 
+		 * for(TransactionInfo txnInfo: listOfTxns) { System.out.println(txnInfo); }
+		 */
 		
-		for(TransactionInfo txnInfo: listOfTxns) {
-			System.out.println(txnInfo);
+		try {
+			System.out.println(	TransactionInfoImpl.getCurrentAccBalance(300, 6354, "credit", "checkin") );
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		
 		
 	}
 

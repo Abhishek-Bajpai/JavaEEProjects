@@ -12,8 +12,12 @@
 <%
 	request.getSession().invalidate();
 	System.out.println("Logged out of session");
-/* 	RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
-	dispatcher.forward(request, response); */
+	
+/* 	
+	RequestDispatcher dispatcher = request.getRequestDispatcher("index.html");
+	dispatcher.forward(request, response);
+*/
+
 	response.sendRedirect("index.html");
 %>
 </body>

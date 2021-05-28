@@ -23,6 +23,7 @@ import bajpai.edu.crypto.HashSaltingPassword;
  */
 public class CustomerInfoImpl extends BankingSystemDBOps {
 
+	
 /*
 		CREATE TABLE bank.customerinfo 
 		(
@@ -37,7 +38,8 @@ public class CustomerInfoImpl extends BankingSystemDBOps {
 		@Override
 	public void registerCustomer(CustomerInfo customer, String accType, String password) {
 
-		Connection connection = BankingSystemDBOps.getConnection();
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
 		Statement statement;
 		try {
 			statement = connection.createStatement();
@@ -95,7 +97,8 @@ public class CustomerInfoImpl extends BankingSystemDBOps {
 
 	@Override
 	public ArrayList<TransactionInfo> fetchTxnHistory(String accNum) {
-		Connection connection = BankingSystemDBOps.getConnection();
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
 		Statement statement;
 		ArrayList<TransactionInfo> listOfTxns = new ArrayList<>();
 		
@@ -147,9 +150,9 @@ public class CustomerInfoImpl extends BankingSystemDBOps {
 	}
 
 	@Override
-	void createAccount(AccountInfo accountInfo) {
-		// TODO Auto-generated method stub
-		
+	boolean createAccount(AccountInfo account) {
+		return false;
+				
 	}
 
 
@@ -164,7 +167,8 @@ public class CustomerInfoImpl extends BankingSystemDBOps {
 
 	@Override
 	public CustomerInfo loginToCustomerAccount(String emailID, String pwd) {
-		Connection connection = BankingSystemDBOps.getConnection();
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
 		Statement statement;
 		
 		CustomerInfo customerInfo=null;
@@ -203,7 +207,9 @@ public class CustomerInfoImpl extends BankingSystemDBOps {
 
 	@Override
 	ArrayList<AccountInfo> fetchCustomerAccounts(String emailID) {
-		Connection connection = BankingSystemDBOps.getConnection();
+		
+		ConnectionFactory connectionFactory=new ConnectionFactory();	
+		Connection connection = connectionFactory.getConnection();
 		ArrayList<AccountInfo> listOfUserAccounts = new ArrayList<>();
 
 		

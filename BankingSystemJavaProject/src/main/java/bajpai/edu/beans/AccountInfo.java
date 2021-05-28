@@ -37,6 +37,9 @@ public class AccountInfo implements Serializable{
 		this.listOfTransactionsForThisAccount = listOfTransactionsForThisAccount;
 	}
 
+	public AccountInfo() {
+		//default constructor
+	}
 	public AccountInfo(int accNumber, String accType, String emailID, String curreBal) {
 		this.accNumber = accNumber;
 		this.accType = accType;

@@ -25,10 +25,10 @@ public abstract class BankingSystemDBOps {
 	
 	String inputString = null;
 	
-	private static Connection connection=null;
+	private Connection connection=null;
 
 //	Adding getConnection so it can be closed by the calling program once DB processing is done
-	public static Connection getConnection() {
+	public Connection getConnection() {
 	 	if(connection == null) {
 	 		try {
 				connection = DriverManager.getConnection(connectionURL, dbUser, dbUserPwdString);
@@ -41,7 +41,7 @@ public abstract class BankingSystemDBOps {
 	}
 	
 	abstract void registerUser(CustomerInfo customer);
-	abstract void createAccount(AccountInfo accountInfo);
+	abstract boolean createAccount(AccountInfo accountInfo);
 	
 	abstract CustomerInfo loginToCustomerAccount(String emailID, String pwd);
 	abstract ArrayList<AccountInfo> fetchCustomerAccounts(String emailID);
